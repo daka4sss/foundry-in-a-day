@@ -12,6 +12,7 @@ File Search ツールを使って、アップロードしたファイルを検�
 """
 
 import os
+import tempfile
 from dotenv import load_dotenv
 from azure.identity import DefaultAzureCredential
 from azure.ai.agents import AgentsClient
@@ -81,7 +82,7 @@ A: Azure AI Foundry は、Azure OpenAI Service を含む包括的な AI 開発�
    エージェント機能、RAG、ファインチューニングなど、より多くの機能を統合的に提供します。
 """
     
-    filepath = "/tmp/sample_document.md"
+    filepath = os.path.join(tempfile.gettempdir(), "sample_document.md")
     with open(filepath, "w", encoding="utf-8") as f:
         f.write(content)
     return filepath

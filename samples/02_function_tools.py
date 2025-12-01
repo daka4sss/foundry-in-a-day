@@ -12,6 +12,8 @@ Sample 02: Agent with Function Tools
 
 import os
 import json
+import ast
+import operator
 from dotenv import load_dotenv
 from azure.identity import DefaultAzureCredential
 from azure.ai.agents import AgentsClient
@@ -70,7 +72,7 @@ def get_weather(location: str, unit: str = "celsius") -> dict:
 
 def calculate(expression: str) -> dict:
     """
-    数式を計算する
+    数式を計算する（安全な AST ベースの評価）
     
     Args:
         expression: 計算式（例: "2 + 3 * 4"）
@@ -78,13 +80,45 @@ def calculate(expression: str) -> dict:
     Returns:
         計算結果の辞書
     """
+    # サポートする演算子
+    operators = {
+        ast.Add: operator.add,
+        ast.Sub: operator.sub,
+        ast.Mult: operator.mul,
+        ast.Div: operator.truediv,
+        ast.Mod: operator.mod,
+        ast.Pow: operator.pow,
+        ast.USub: operator.neg,
+        ast.UAdd: operator.pos,
+    }
+    
+    def _eval(node):
+        """AST ノードを安全に評価"""
+        if isinstance(node, ast.Constant):
+            if isinstance(node.value, (int, float)):
+                return node.value
+            raise ValueError("数値以外の定数は許可されていません")
+        elif isinstance(node, ast.BinOp):
+            left = _eval(node.left)
+            right = _eval(node.right)
+            op = operators.get(type(node.op))
+            if op is None:
+                raise ValueError(f"サポートされていない演算子: {type(node.op).__name__}")
+            return op(left, right)
+        elif isinstance(node, ast.UnaryOp):
+            operand = _eval(node.operand)
+            op = operators.get(type(node.op))
+            if op is None:
+                raise ValueError(f"サポートされていない演算子: {type(node.op).__name__}")
+            return op(operand)
+        elif isinstance(node, ast.Expression):
+            return _eval(node.body)
+        else:
+            raise ValueError(f"サポートされていない式: {type(node).__name__}")
+    
     try:
-        # 安全な評価のため、許可された文字のみを含むかチェック
-        allowed_chars = set("0123456789+-*/().% ")
-        if not all(c in allowed_chars for c in expression):
-            return {"error": "無効な文字が含まれています", "expression": expression}
-        
-        result = eval(expression)  # noqa: S307 - 入力は検証済み
+        tree = ast.parse(expression, mode='eval')
+        result = _eval(tree)
         return {"expression": expression, "result": result}
     except Exception as e:
         return {"error": str(e), "expression": expression}

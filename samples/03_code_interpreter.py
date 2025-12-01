@@ -10,6 +10,7 @@ Code Interpreter ツールを使って、エージェントにPythonコードを
 """
 
 import os
+import tempfile
 from dotenv import load_dotenv
 from azure.identity import DefaultAzureCredential
 from azure.ai.agents import AgentsClient
@@ -107,7 +108,7 @@ Code Interpreter を使って、Pythonコードを実行してユーザーのリ
                     # ファイルをダウンロード
                     try:
                         file_content = client.files.get_content(file_id)
-                        output_path = f"/tmp/output_chart_{file_id[:8]}.png"
+                        output_path = os.path.join(tempfile.gettempdir(), f"output_chart_{file_id[:8]}.png")
                         with open(output_path, "wb") as f:
                             f.write(file_content)
                         print(f"   💾 ファイル保存: {output_path}")
