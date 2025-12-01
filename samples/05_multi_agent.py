@@ -66,33 +66,42 @@ class MultiAgentOrchestrator:
     def run_agent(self, agent_name: str, prompt: str) -> str:
         """指定されたエージェントを実行"""
         agent = self.agents[agent_name]
+        thread = None
         
-        # スレッドを作成
-        thread = self.client.threads.create()
-        
-        # メッセージを送信
-        self.client.messages.create(
-            thread_id=thread.id,
-            role=MessageRole.USER,
-            content=prompt
-        )
-        
-        # 実行
-        run = self.client.runs.create_and_process(
-            thread_id=thread.id,
-            agent_id=agent.id
-        )
-        
-        # 応答を取得
-        messages = self.client.messages.list(thread_id=thread.id)
-        
-        for msg in messages:
-            if msg.role == MessageRole.ASSISTANT:
-                for content_item in msg.content:
-                    if hasattr(content_item, "text"):
-                        return content_item.text.value
-        
-        return ""
+        try:
+            # スレッドを作成
+            thread = self.client.threads.create()
+            
+            # メッセージを送信
+            self.client.messages.create(
+                thread_id=thread.id,
+                role=MessageRole.USER,
+                content=prompt
+            )
+            
+            # 実行
+            run = self.client.runs.create_and_process(
+                thread_id=thread.id,
+                agent_id=agent.id
+            )
+            
+            # 応答を取得
+            messages = self.client.messages.list(thread_id=thread.id)
+            
+            for msg in messages:
+                if msg.role == MessageRole.ASSISTANT:
+                    for content_item in msg.content:
+                        if hasattr(content_item, "text"):
+                            return content_item.text.value
+            
+            return ""
+        finally:
+            # スレッドのクリーンアップ
+            if thread:
+                try:
+                    self.client.threads.delete(thread.id)
+                except Exception:
+                    pass
     
     def orchestrate(self, topic: str) -> dict:
         """複数エージェントを協調させてタスクを実行"""
