@@ -12,6 +12,27 @@ Microsoft Foundry SDK を使って AI エージェントを構築するハンズ
 | 4 | `mcp-server-agent.ipynb` | MCP (Model Context Protocol) サーバー連携 |
 | 5 | `foundry memory.ipynb` | メモリストアによるユーザー情報の保存・検索 |
 
+## 📋 前提条件
+
+### 共通
+- Python 3.8+
+- Azure AI Foundry へのアクセス権限（リソースの作成・管理が可能なこと）
+- Azure AI Foundry プロジェクト
+- チャットモデルのデプロイ（例: `gpt-4.1`）
+
+### 2. Bing Grounding
+- Bing Search 接続の設定
+
+### 4. MCP
+- MCP 接続の設定
+
+### 5. Memory
+- プロジェクトのマネージド ID に親リソースへの **Azure AI User ロール** が付与されていること  
+  （メモリランタイムがモデルデプロイメントを呼び出すために必要）
+- 埋め込みモデルのデプロイ（例: `text-embedding-3-small`）
+
+## ⚙️ セットアップ
+
 ### 1. 仮想環境の作成
 ```bash
 # 仮想環境を作成
