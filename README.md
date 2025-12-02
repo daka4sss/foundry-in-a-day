@@ -44,7 +44,7 @@ BING_PROJECT_CONNECTION_ID=<Bing接続ID>  # 2番で使用
 
 `BING_PROJECT_CONNECTION_ID` は、Microsoft Foundry Agents メニューのYAMLタブにて、`project_connection_id` の値を取得（**予め Foundry Agent で Bing Search 接続を構成する必要があります**）
 
-![alt text](./assets/image.png)
+![BING_PROJECT_CONNECTION_IDの取得](./assets/image.png)
 
 ### 4. Azure認証
 `DefaultAzureCredential` を使用。以下のいずれかで認証:
@@ -52,6 +52,14 @@ BING_PROJECT_CONNECTION_ID=<Bing接続ID>  # 2番で使用
 az login
 ```
 または VS Code Azure拡張機能でサインイン。
+
+Foundry Project に割り当てられたマネージド ID に対して、サブスクリプションをスコープとして `Azure AI User` を割り当て
+
+![マネージドID](./assets/image2.png)
+
+![Azure ロールの割り当て](./assets/image3.png)
+
+![ロールの選択](./assets/image4.png)
 
 ## 🚀 実行方法
 
