@@ -42,6 +42,10 @@ project_endpoint=<Foundry プロジェクトエンドポイント>
 BING_PROJECT_CONNECTION_ID=<Bing接続ID>  # 2番で使用
 ```
 
+`BING_PROJECT_CONNECTION_ID` は、Microsoft Foundry Agents メニューのYAMLタブにて、`project_connection_id` の値を取得（**予め Foundry Agent で Bing Search 接続を構成する必要があります**）
+
+![alt text](./assets/image.png)
+
 ### 4. Azure認証
 `DefaultAzureCredential` を使用。以下のいずれかで認証:
 ```bash
