@@ -12,25 +12,42 @@ Microsoft Foundry SDK を使って AI エージェントを構築するハンズ
 | 4 | `mcp-server-agent.ipynb` | MCP (Model Context Protocol) サーバー連携 |
 | 5 | `foundry memory.ipynb` | メモリストアによるユーザー情報の保存・検索 |
 
-## ⚙️ セットアップ
+### 1. 仮想環境の作成
+```bash
+# 仮想環境を作成
+python -m venv venv
 
-### 1. 依存関係インストール
+# 仮想環境を有効化（Windows）
+.\venv\Scripts\activate
+
+# 仮想環境を有効化（Mac/Linux）
+source venv/bin/activate
+```
+
+### 2. 依存関係インストール
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. 環境変数設定
-`.env` ファイルを作成:
+
+### 3. 環境変数設定
+`.env.sample` をコピーして `.env` を作成:
+```bash
+cp .env.sample .env
+```
+
+`.env` を編集:
 ```env
 project_endpoint=<Foundry プロジェクトエンドポイント>
 BING_PROJECT_CONNECTION_ID=<Bing接続ID>  # 2番で使用
 ```
 
-### 3. Azure認証
+### 4. Azure認証
 `DefaultAzureCredential` を使用。以下のいずれかで認証:
-- Azure CLI (`az login`)
-- VS Code Azure拡張機能
-- 環境変数
+```bash
+az login
+```
+または VS Code Azure拡張機能でサインイン。
 
 ## 🚀 実行方法
 
