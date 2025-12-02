@@ -74,14 +74,6 @@ az login
 
 各 `.ipynb` ファイルを VS Code または Jupyter で開き、セルを順番に実行。
 
-## 📋 前提条件
-
-- Python 3.8+
-- Foundry Project
-- デプロイ済みモデル（例: `gpt-4.1`）
-- Bing Search 接続（2番用）
-- MCP 接続（4番用）
-
 ## 🔗 参考リンク
 
 - [Microsoft Foundry ドキュメント](https://learn.microsoft.com/ja-jp/azure/ai-foundry/what-is-azure-ai-foundry?view=foundry)
